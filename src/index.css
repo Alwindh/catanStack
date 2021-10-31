@@ -5,9 +5,158 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+      width: 100%;
+    height: 100%;
+        background-size:cover;
+    background-image: url("wallpaper.jpg");
+}
+
+html {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+      width: 100% !important;
+    height: 100% !important;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+#root{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+
+    backdrop-filter: blur(5px) grayscale(0.7) contrast(01);
+}
+
+
+
+.blue
+{
+ background-color: #3399CC;
+  border-bottom: 5px solid #404549;
+ text-shadow: 0px -2px #006696;
+  padding: 10px 40px;
+margin: 0px 10px 10px 0px;
+ border-radius: 3px;
+ font-family: 'Lato', sans-serif;
+ color: #FFF;
+    animation: blueshift 1s;
+  -webkit-animation: blueshift 1s;
+  -moz-animation: blueshift 1s;
+  -o-animation: blueshift 1s;
+  -ms-animation: blueshift 1s;
+}
+
+.red
+{
+ background-color: #CC6633;
+ border-bottom: 5px solid #404549;
+ text-shadow: 0px -2px #903400;
+  padding: 10px 40px;
+margin: 0px 10px 10px 0px;
+ border-radius: 3px;
+ font-family: 'Lato', sans-serif;
+ color: #FFF;
+     animation: redshift 1s;
+  -webkit-animation: redshift 1s;
+  -moz-animation: redshift 1s;
+  -o-animation: redshift 1s;
+  -ms-animation: redshift 1s;
+}
+
+
+
+.text{
+  animation: fadeIn 1s;
+  -webkit-animation: fadeIn 1s;
+  -moz-animation: fadeIn 1s;
+  -o-animation: fadeIn 1s;
+  -ms-animation: fadeIn 1s;
+}
+@keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-moz-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-webkit-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-o-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-ms-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@keyframes blueshift {
+  0% {background-color: #656a6d; border-bottom: 1px solid #404549;  transform: translate(0px,5px);}
+  100% {background-color: #3399CC; border-bottom: 5px solid #404549; }
+}
+
+@-moz-keyframes blueshift {
+  0% {background-color: #656a6d;}
+  100% {background-color: #3399CC;}
+}
+
+@-webkit-keyframes blueshift {
+  0% {background-color: #656a6d}
+  100% {background-color: #3399CC;}
+}
+
+@-o-keyframes blueshift {
+  0% {background-color: #656a6d}
+  100% {background-color: #3399CC;}
+}
+
+@-ms-keyframes blueshift {
+  0% {background-color: #656a6d}
+  100% {background-color: #3399CC;}
+}
+
+.avoid-clicks {
+  pointer-events: none;
+}
+
+@keyframes redshift {
+  0% {background-color: #656a6d; border-bottom: 1px solid #404549;  transform: translate(0px,5px);}
+  100% {background-color: #CC6633; border-bottom: 5px solid #404549; }
+}
+
+@-moz-keyframes redshift {
+  0% {background-color: #656a6d;}
+  100% {background-color: #CC6633;}
+}
+
+@-webkit-keyframes redshift {
+  0% {background-color: #656a6d}
+  100% {background-color: #CC6633;}
+}
+
+@-o-keyframes redshift {
+  0% {background-color: #656a6d}
+  100% {background-color: #CC6633;}
+}
+
+@-ms-keyframes redshift {
+  0% {background-color: #656a6d}
+  100% {background-color: #CC6633;}
 }
