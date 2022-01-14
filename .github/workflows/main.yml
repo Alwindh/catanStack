@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: deployMaster
+name: DeployToProd
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -14,11 +14,34 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: ls -a via OPEN SSH Private Key
-        uses: garygrossgarten/github-action-ssh@release
+    steps:        
+      - name: Pulling latest version to server
+        uses: appleboy/ssh-action@master
         with:
-          command: cd ${{ secrets.DIRECTORY }}  && git stash && git pull origin main && npm ci && npm run build
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           password: ${{ secrets.PASSWORD }}
+          script: |
+            cd ${{ secrets.DIRECTORY }}
+            git stash
+            git pull origin main
+            
+      - name: Setting up NPM environment
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            cd ${{ secrets.DIRECTORY }}
+            npm ci
+            
+      - name: Creating optimized production build
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            cd ${{ secrets.DIRECTORY }}
+            npm run build
