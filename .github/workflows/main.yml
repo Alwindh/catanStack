@@ -27,7 +27,7 @@ jobs:
             git pull origin main
             
   NPM_CI:
-    name: Set up NPM env
+    name: Set up NPM environment
     needs: GIT_PULL
     runs-on: ubuntu-latest
     steps:     
