@@ -15,7 +15,7 @@ jobs:
     name: Pull latest version to server
     runs-on: ubuntu-latest
     steps:        
-      - name: Pull latest version to server
+      - name: git pull
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -27,11 +27,11 @@ jobs:
             git pull origin main
             
   NPM_CI:
-    name: Set up NPM environment
+    name: Set up NPM env
     needs: GIT_PULL
     runs-on: ubuntu-latest
     steps:     
-      - name: Set up NPM environment
+      - name: npm ci
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -41,11 +41,11 @@ jobs:
             cd ${{ secrets.DIRECTORY }}
             npm ci
   BUILD:
-    name: Create optimized production build
+    name: Create optimized build
     needs: NPM_CI
     runs-on: ubuntu-latest
     steps:     
-      - name: Create optimized production build
+      - name: npm run build
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
