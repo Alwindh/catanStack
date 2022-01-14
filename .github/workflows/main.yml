@@ -11,9 +11,8 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  GIT_PULL:
     runs-on: ubuntu-latest
-
     steps:        
       - name: Pulling latest version to server
         uses: appleboy/ssh-action@master
@@ -26,6 +25,9 @@ jobs:
             git stash
             git pull origin main
             
+  NPM_CI:
+    runs-on: ubuntu-latest
+    steps:     
       - name: Setting up NPM environment
         uses: appleboy/ssh-action@master
         with:
@@ -35,7 +37,9 @@ jobs:
           script: |
             cd ${{ secrets.DIRECTORY }}
             npm ci
-            
+  BUILD:
+    runs-on: ubuntu-latest
+    steps:     
       - name: Creating optimized production build
         uses: appleboy/ssh-action@master
         with:
