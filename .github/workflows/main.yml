@@ -6,9 +6,9 @@ name: deployMaster
 # events but only for the master branch
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -18,7 +18,7 @@ jobs:
       - name: ls -a via OPEN SSH Private Key
         uses: garygrossgarten/github-action-ssh@release
         with:
-          command: cd ${{ secrets.DIRECTORY }}  && git stash && git pull origin master && npm ci && npm run build
+          command: cd ${{ secrets.DIRECTORY }}  && git stash && git pull origin main && npm ci && npm run build
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           password: ${{ secrets.PASSWORD }}
