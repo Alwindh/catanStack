@@ -12,45 +12,43 @@ on:
 
 jobs:
   GIT_PULL:
-    name: Pull latest version to server
     runs-on: ubuntu-latest
-    steps:        
+    name: Pull latest version to server
+    steps:
       - name: git pull
-        uses: appleboy/ssh-action@master
+        uses: garygrossgarten/github-action-ssh@release
         with:
+          command: cd ${{ secrets.DIRECTORY }} && git stash && git pull origin main
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
-          password: ${{ secrets.PASSWORD }}
-          script: |
-            cd ${{ secrets.DIRECTORY }}
-            git stash
-            git pull origin main
+          password: ${{ secrets.PASSWORD }}  
+  
             
   NPM_CI:
     name: Set up NPM environment
     needs: GIT_PULL
     runs-on: ubuntu-latest
-    steps:     
+    steps:
       - name: npm ci
-        uses: appleboy/ssh-action@master
+        uses: garygrossgarten/github-action-ssh@release
         with:
+          command: cd ${{ secrets.DIRECTORY }} && npm ci
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           password: ${{ secrets.PASSWORD }}
           script: |
             cd ${{ secrets.DIRECTORY }}
             npm install
+
   BUILD:
     name: Create optimized build
     needs: NPM_CI
     runs-on: ubuntu-latest
-    steps:     
+    steps:
       - name: npm run build
-        uses: appleboy/ssh-action@master
+        uses: garygrossgarten/github-action-ssh@release
         with:
+          command: cd ${{ secrets.DIRECTORY }} && npm run build
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
-          password: ${{ secrets.PASSWORD }}
-          script: |
-            cd ${{ secrets.DIRECTORY }}
-            npm run build
+          password: ${{ secrets.PASSWORD }} 
