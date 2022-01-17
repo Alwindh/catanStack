@@ -39,7 +39,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           script: |
             cd ${{ secrets.DIRECTORY }}
-            npm ci
+            npm install
   BUILD:
     name: Create optimized build
     needs: NPM_CI
