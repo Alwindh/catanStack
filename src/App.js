@@ -56,8 +56,11 @@ export default function CatanStack() {
 		} else {
 			return (
 				<>
-					<div className={"text"}>{number.toString()}</div>
-					<div className={"text"} style={{ fontSize: "0.6em", position: "absolute", marginTop: "20vh" }}>
+					<div className={"text avoid-clicks"}>{number.toString()}</div>
+					<div
+						className={"text avoid-clicks"}
+						style={{ fontSize: "0.6em", position: "absolute", marginTop: "20vh" }}
+					>
 						{". ".repeat(dots)}
 					</div>
 				</>
@@ -76,7 +79,7 @@ export default function CatanStack() {
 				}}
 			></div>
 			<div
-				className={"block " + color}
+				className={"avoid-clicks block " + color}
 				style={{
 					width: "50%",
 					height: "50%",
