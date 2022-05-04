@@ -1,123 +1,93 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import "./index.css";
+import { WebSocketImport } from "./websocket";
 
-export default class startPage extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			deck: [],
-			curValue: "?",
-			dots: {},
-			curDots: "",
-			rolling: false,
-			blue: true,
-		};
-	}
+export default function CatanStack() {
+	const [rolling, setRolling] = useState(false);
+	const [color, setColor] = useState("gray");
+	const [dots, setDots] = useState(0);
+	const [number, setNumber] = useState("?");
+	const [init, setInit] = useState(false);
+	let client = WebSocketImport();
 
-	componentDidMount() {
-		this.createDeck();
-	}
-
-	createDeck() {
-		let cardDeck = [];
-		for (let dice1 = 1; dice1 < 7; dice1++) {
-			for (let dice2 = 1; dice2 < 7; dice2++) {
-				cardDeck.push(dice1 + dice2);
+	useEffect(() => {
+		if (client.webSocket) {
+			client.webSocket.onmessage = (message) => {
+				if (message.data.length) {
+					console.log(message.data.length);
+					const incData = JSON.parse(message.data);
+					setColor(incData.color);
+					setDots(incData.dots);
+					setNumber(incData.number);
+					setRolling(false);
+				}
+			};
+			if (number === 0) {
 			}
 		}
-		this.setState({ deck: cardDeck });
-		if (this.state.dots[2] === undefined) {
-			this.getDots(cardDeck);
+	}, [client, number]);
+
+	useEffect(() => {
+		if (!init) {
+			client.sendMessage(
+				JSON.stringify({
+					rollDice: false,
+				})
+			);
+			setInit(true);
+		}
+	}, [init, client]);
+
+	function rollDice() {
+		if (!rolling) {
+			setRolling(true);
+			client.sendMessage(
+				JSON.stringify({
+					rollDice: true,
+				})
+			);
 		}
 	}
 
-	getDots(deck) {
-		let dots = {};
-		deck.forEach((element) => {
-			if (dots[element] === undefined) {
-				dots[element] = 1;
-			} else {
-				dots[element] += 1;
-			}
-		});
-		this.setState({ dots: dots });
-	}
-
-	randomNumber() {
-		let min = 0;
-		let max = this.state.deck.length;
-		return Math.floor(Math.random() * (max - min)) + min;
-	}
-
-	async drawCard() {
-		this.setState({ rolling: true, curValue: "", curDots: "" });
-		let deckNumber = this.randomNumber();
-		let number = this.state.deck[deckNumber];
-		let newDeck = this.state.deck;
-		let dotString = "";
-		for (let dots = 0; dots < this.state.dots[number]; dots++) {
-			dotString += ".";
-		}
-		newDeck.splice(deckNumber, 1);
-		if (this.state.deck.length === 0) {
-			this.createDeck();
-		}
-		this.setState({ curValue: String(number) });
-
-		await new Promise((r) => setTimeout(r, 1));
-
-		this.setState({ rolling: false, curDots: dotString, blue: !this.state.blue });
-	}
-
-	setThingy() {
-		if (this.state.rolling) {
+	function setThingy() {
+		if (rolling) {
 			return "";
 		} else {
 			return (
 				<>
-					<div className={"text"}>{this.state.curValue}</div>
+					<div className={"text"}>{number.toString()}</div>
 					<div className={"text"} style={{ fontSize: "0.6em", position: "absolute", marginTop: "20vh" }}>
-						{this.state.curDots}
+						{". ".repeat(dots)}
 					</div>
 				</>
 			);
 		}
 	}
 
-	render() {
-		return (
-			<>
-				<div
-					onClick={() => {
-						this.drawCard();
-					}}
-					style={{
-						width: "100%",
-						height: "100%",
-						position: "absolute",
-					}}
-				></div>
-				<div
-					className={
-						this.state.rolling
-							? "shadow avoid-clicks gray"
-							: this.state.blue
-							? "shadow avoid-clicks blue"
-							: "shadow avoid-clicks red"
-					}
-					style={{
-						width: "50%",
-						height: "50%",
-						fontSize: "10em",
-						display: "flex",
-						alignItems: "center",
-						justifyContent: "center",
-					}}
-				>
-					{this.setThingy()}
-				</div>
-			</>
-		);
-	}
+	return (
+		<>
+			<div
+				onClick={rollDice}
+				style={{
+					width: "100%",
+					height: "100%",
+					position: "absolute",
+				}}
+			></div>
+			<div
+				className={"block " + color}
+				style={{
+					width: "50%",
+					height: "50%",
+					fontSize: "10em",
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "center",
+				}}
+			>
+				{setThingy()}
+			</div>
+		</>
+	);
 }
