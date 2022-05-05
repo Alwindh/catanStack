@@ -48,8 +48,15 @@ code {
     -moz-animation: blueshift 1s;
     -o-animation: blueshift 1s;
     -ms-animation: blueshift 1s;
-        border-bottom: 5px solid #404549;
+    border-bottom: 5px solid #404549;
 
+}
+
+.clickBlock{
+    padding: 10px 40px;
+    margin: 0px 10px 10px 0px;
+    border-radius: 3px;
+    cursor: pointer;
 }
 
 .gray

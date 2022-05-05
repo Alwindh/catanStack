@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import "./index.css";
+
 import { WebSocketImport } from "./websocket";
 
 export default function CatanStack() {
-	const [rolling, setRolling] = useState(false);
 	const [color, setColor] = useState("gray");
 	const [dots, setDots] = useState(0);
 	const [number, setNumber] = useState("?");
@@ -14,22 +14,28 @@ export default function CatanStack() {
 	useEffect(() => {
 		if (client.webSocket) {
 			client.webSocket.onmessage = (message) => {
-				if (message.data.length) {
-					console.log(message.data.length);
+				if (message.data.length === undefined) {
+					setColor("gray");
+					setDots(0);
+					setNumber("?");
+				} else {
 					const incData = JSON.parse(message.data);
 					setColor(incData.color);
 					setDots(incData.dots);
 					setNumber(incData.number);
-					setRolling(false);
 				}
 			};
-			if (number === 0) {
-			}
 		}
-	}, [client, number]);
+	}, [client]);
 
 	useEffect(() => {
-		if (!init) {
+		if (client.readyState !== 1 && init) {
+			setError();
+		}
+	}, [client, init]);
+
+	useEffect(() => {
+		if (!init && client.readyState === 1) {
 			client.sendMessage(
 				JSON.stringify({
 					rollDice: false,
@@ -40,43 +46,43 @@ export default function CatanStack() {
 	}, [init, client]);
 
 	function rollDice() {
-		if (!rolling) {
-			setRolling(true);
+		console.log(client.readyState);
+		if (client.readyState === 1 && number !== "!") {
 			client.sendMessage(
 				JSON.stringify({
 					rollDice: true,
 				})
 			);
+		} else {
+			setError();
+			client.sendMessage(
+				JSON.stringify({
+					rollDice: false,
+				})
+			);
 		}
 	}
 
-	function setThingy() {
-		if (rolling) {
-			return "";
-		} else {
-			return (
-				<>
-					<div className={"text avoid-clicks"}>{number.toString()}</div>
-					<div
-						className={"text avoid-clicks"}
-						style={{ fontSize: "0.6em", position: "absolute", marginTop: "20vh" }}
-					>
-						{". ".repeat(dots)}
-					</div>
-				</>
-			);
-		}
+	function setError() {
+		setColor("gray");
+		setDots(0);
+		setNumber("!");
+		setInit(false);
 	}
 
 	return (
 		<>
 			<div
-				onClick={rollDice}
+				className="clickBlock"
 				style={{
-					width: "100%",
-					height: "100%",
+					width: "52%",
+					height: "52%",
 					position: "absolute",
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "center",
 				}}
+				onClick={rollDice}
 			></div>
 			<div
 				className={"avoid-clicks block " + color}
@@ -89,7 +95,15 @@ export default function CatanStack() {
 					justifyContent: "center",
 				}}
 			>
-				{setThingy()}
+				<>
+					<div className={"text avoid-clicks"}>{number.toString()}</div>
+					<div
+						className={"text avoid-clicks"}
+						style={{ fontSize: "0.6em", position: "absolute", marginTop: "20vh" }}
+					>
+						{". ".repeat(dots)}
+					</div>
+				</>
 			</div>
 		</>
 	);
