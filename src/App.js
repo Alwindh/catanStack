@@ -99,7 +99,7 @@ export default function CatanStack() {
 					<div className={"text avoid-clicks"}>{number.toString()}</div>
 					<div
 						className={"text avoid-clicks"}
-						style={{ fontSize: "0.6em", position: "absolute", marginTop: "20vh" }}
+						style={{ fontSize: "0.5em", position: "absolute", marginTop: "20vh" }}
 					>
 						{". ".repeat(dots)}
 					</div>
